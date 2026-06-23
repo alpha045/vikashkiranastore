@@ -19,6 +19,9 @@ function App() {
       <Route path="/why-choose" element={<ProblemsSection />} />
       <Route path="/reviews" element={<Reviews />} />
       <Route path="/dashboard" element={<Dashboard />} />
+
+
+      
     </Routes>
   )
 }
