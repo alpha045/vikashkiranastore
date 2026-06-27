@@ -1,0 +1,145 @@
+import { useState, useEffect } from "react";
+import { X } from "lucide-react";
+
+export default function AddCustomerModal({
+  open,
+  onClose,
+  onSave,
+}) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [balance, setBalance] = useState("");
+
+  useEffect(() => {
+    if (open) {
+      setName("");
+      setPhone("");
+      setBalance("");
+    }
+  }, [open]);
+
+  if (!open) return null;
+
+  const handleSave = () => {
+    if (!name.trim()) {
+      alert("Please enter customer name");
+      return;
+    }
+
+    if (!phone.trim()) {
+      alert("Please enter phone number");
+      return;
+    }
+
+    if (phone.length !== 10) {
+      alert("Phone number must be 10 digits");
+      return;
+    }
+
+    onSave({
+      id: Date.now(),
+      name,
+      phone,
+      balance: Number(balance) || 0,
+      transactions: [],
+      createdAt: new Date().toISOString(),
+    });
+
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
+
+      <div className="w-112.5 bg-[#141823] rounded-2xl border border-gray-700">
+
+        {/* Header */}
+        <div className="flex justify-between items-center p-6 border-b border-gray-700">
+
+          <h2 className="text-2xl font-bold text-white">
+            Add Customer
+          </h2>
+
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white"
+          >
+            <X size={22} />
+          </button>
+
+        </div>
+
+        {/* Body */}
+        <div className="p-6 space-y-5">
+
+          <div>
+            <label className="text-gray-400 text-sm">
+              Customer Name
+            </label>
+
+            <input
+              type="text"
+              placeholder="Enter customer name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="mt-2 w-full bg-[#0b0f14] border border-gray-700 rounded-lg p-3 text-white outline-none focus:border-teal-500"
+            />
+          </div>
+
+          <div>
+            <label className="text-gray-400 text-sm">
+              Phone Number
+            </label>
+
+            <input
+              type="tel"
+              placeholder="9876543210"
+              value={phone}
+              maxLength={10}
+              onChange={(e) =>
+                setPhone(e.target.value.replace(/\D/g, ""))
+              }
+              className="mt-2 w-full bg-[#0b0f14] border border-gray-700 rounded-lg p-3 text-white outline-none focus:border-teal-500"
+            />
+          </div>
+
+          <div>
+            <label className="text-gray-400 text-sm">
+              Opening Balance (Optional)
+            </label>
+
+            <input
+              type="number"
+              placeholder="0"
+              value={balance}
+              onChange={(e) => setBalance(e.target.value)}
+              className="mt-2 w-full bg-[#0b0f14] border border-gray-700 rounded-lg p-3 text-white outline-none focus:border-teal-500"
+            />
+          </div>
+
+        </div>
+
+        {/* Footer */}
+        <div className="border-t border-gray-700 p-6 flex justify-end gap-3">
+
+          <button
+            onClick={onClose}
+            className="px-6 py-2 rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-700"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={handleSave}
+            className="px-6 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white font-semibold"
+          >
+            Save Customer
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
